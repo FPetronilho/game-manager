@@ -18,15 +18,22 @@
 	<!-- #### P R O J E C T _ D E S C R I P T I O N ############################## -->
 	<!-- ######################################################################### -->
 
-	<artifactId>game-manager-core</artifactId>
-	<name>Game Manager :: Core</name>
-	<description>Game Manager Core Module</description>
+	<artifactId>game-manager-entrypoint-rest</artifactId>
+	<name>Game Manager :: Entry Point REST</name>
+	<description>Game Manager Entry Point REST Module</description>
 
 	<!-- #########################################################################  -->
 	<!-- #### P R O J E C T _ D E P E N D E N C I E S ############################ -->
 	<!-- ######################################################################### -->
 
 	<dependencies>
+		<!-- internal dependencies -->
+		<dependency>
+			<groupId>com.tracktainment</groupId>
+			<artifactId>game-manager-core</artifactId>
+		</dependency>
+
+		<!-- external dependencies -->
 	</dependencies>
 
 	<!-- #########################################################################  -->
@@ -34,6 +41,7 @@
 	<!-- ######################################################################### -->
 
 	<properties>
+		<jose4j.version>0.9.6</jose4j.version>
 	</properties>
 
 	<!-- #########################################################################  -->

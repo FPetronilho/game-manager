@@ -18,17 +18,34 @@
 	<!-- #### P R O J E C T _ D E S C R I P T I O N ############################## -->
 	<!-- ######################################################################### -->
 
-	<artifactId>game-manager-core</artifactId>
-	<name>Game Manager :: Core</name>
-	<description>Game Manager Core Module</description>
+	<artifactId>game-manager-dataprovider-sql</artifactId>
+	<name>Game Manager :: Data Provider SQL</name>
+	<description>Game Manager Data Provider SQL Module</description>
 
 	<!-- #########################################################################  -->
 	<!-- #### P R O J E C T _ D E P E N D E N C I E S ############################ -->
 	<!-- ######################################################################### -->
 
 	<dependencies>
-	</dependencies>
+		<!-- internal dependencies -->
+		<dependency>
+			<groupId>com.tracktainment</groupId>
+			<artifactId>game-manager-core</artifactId>
+		</dependency>
 
+		<!-- external dependencies -->
+		<!-- SQL -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
 	<!-- #########################################################################  -->
 	<!-- #### P R O J E C T _ P R O P E R T I E S ################################ -->
 	<!-- ######################################################################### -->
