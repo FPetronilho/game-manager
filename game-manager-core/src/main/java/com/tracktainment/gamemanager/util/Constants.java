@@ -24,9 +24,9 @@ public class Constants {
     // Regex
     public static final String ID_REGEX = "^\\d{1,19}$";
     public static final String TITLE_REGEX = "^[A-Za-z0-9\\s\\-,\\.\\'\\\";!?()&]{1,200}$";
-    public static final String PLATFORM_REGEX = "";
-    public static final String GENRE_REGEX = "";
-    public static final String DEVELOPER_REGEX = "";
+    public static final String PLATFORM_REGEX = "^[\\\\w\\\\s\\\\-]{1,50}$";
+    public static final String GENRE_REGEX = "^[A-Za-z\\\\s\\\\-]{1,50}$";
+    public static final String DEVELOPER_REGEX = "^[A-Za-z0-9&.,'\\\\s\\\\-]{1,150}$";
 
 
     // Fields validation

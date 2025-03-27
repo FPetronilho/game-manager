@@ -2,6 +2,9 @@ package com.tracktainment.gamemanager.usecases;
 
 import com.tracktainment.gamemanager.dataprovider.GameDataProvider;
 import com.tracktainment.gamemanager.domain.Game;
+import com.tracktainment.gamemanager.domain.OrderBy;
+import com.tracktainment.gamemanager.domain.OrderDirection;
+import com.tracktainment.gamemanager.exception.ParameterValidationFailedException;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +35,18 @@ public class ListByCriteriaUseCase {
 
     private void inputValidation(Input input) {
         if (input.getTo() != null && input.getFrom() != null && input.getTo().isBefore(input.getFrom())) {
+            throw new ParameterValidationFailedException("Invalid dates input: 'to' must be later than 'from'.");
+        }
 
+        if (input.getOrderByList().size() != input.getOrderDirectionList().size()) {
+            throw new ParameterValidationFailedException(
+                    String.format(
+                            "Invalid orderBy and orderDirection pair. " +
+                                    "'orderBy' size is %s and orderDirection size is %s. Both sizes must match",
+                            input.getOrderByList().size(),
+                            input.getOrderDirectionList().size()
+                    )
+            );
         }
     }
 
@@ -49,6 +63,8 @@ public class ListByCriteriaUseCase {
         private LocalDate createdAt;
         private LocalDate from;
         private LocalDate to;
+        private List<OrderBy> orderByList;
+        private List<OrderDirection> orderDirectionList;
     }
 
     @AllArgsConstructor
