@@ -55,6 +55,8 @@ public class ListByCriteriaUseCase {
     @Data
     @Builder
     public static class Input {
+        private Integer offset;
+        private Integer limit;
         private String title;
         private String platform;
         private String genre;
