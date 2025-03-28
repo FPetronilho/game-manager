@@ -9,10 +9,12 @@ import com.tracktainment.gamemanager.dto.GameUpdate;
 import com.tracktainment.gamemanager.usecases.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -29,26 +31,81 @@ public class GameController implements GameRestApi {
 
     @Override
     public ResponseEntity<Game> create(GameCreate gameCreate) {
-        return null;
+        log.info("Creating game: {}", gameCreate);
+        CreateUseCase.Input input = CreateUseCase.Input.builder()
+                .gameCreate(gameCreate)
+                .build();
+
+        CreateUseCase.Output output = createUseCase.execute(input);
+        return new ResponseEntity<>(output.getGame(), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<Game> findById(Long id) {
-        return null;
+        log.info("Finding game by ID: {}", id);
+        FindByIdUseCase.Input input = FindByIdUseCase.Input.builder()
+                .id(id)
+                .build();
+
+        FindByIdUseCase.Output output = findByIdUseCase.execute(input);
+        return new ResponseEntity<>(output.getGame(), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<List<Game>> listByCriteria(Long offset, Long limit, String title, String platform, String genre, String developer, String releaseDate, String createdAt, String from, String to, List<OrderBy> orderByList, List<OrderDirection> orderDirectionList) {
-        return null;
+    public ResponseEntity<List<Game>> listByCriteria(
+            Integer offset,
+            Integer limit,
+            String title,
+            String platform,
+            String genre,
+            String developer,
+            LocalDate releaseDate,
+            LocalDate createdAt,
+            LocalDate from,
+            LocalDate to,
+            List<OrderBy> orderByList,
+            List<OrderDirection> orderDirectionList
+    ) {
+        ListByCriteriaUseCase.Input input = ListByCriteriaUseCase.Input.builder()
+                .offset(offset)
+                .limit(limit)
+                .title(title)
+                .platform(platform)
+                .genre(genre)
+                .developer(developer)
+                .releaseDate(releaseDate)
+                .createdAt(createdAt)
+                .from(from)
+                .to(to)
+                .orderByList(orderByList)
+                .orderDirectionList(orderDirectionList)
+                .build();
+
+        log.info("Listing games by criteria: {}", input);
+        ListByCriteriaUseCase.Output output = listByCriteriaUseCase.execute(input);
+        return new ResponseEntity<>(output.getGames(), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Game> update(Long id, GameUpdate gameUpdate) {
-        return null;
+        log.info("Updating game by ID: {}. Updating to: {}", id, gameUpdate);
+        UpdateUseCase.Input input = UpdateUseCase.Input.builder()
+                .id(id)
+                .gameUpdate(gameUpdate)
+                .build();
+
+        UpdateUseCase.Output output = updateUseCase.execute(input);
+        return new ResponseEntity<>(output.getGame(), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Void> delete(Long id) {
-        return null;
+        log.info("Deleting game by ID: {}", id);
+        DeleteUseCase.Input input = DeleteUseCase.Input.builder()
+                .id(id)
+                .build();
+
+        deleteUseCase.execute(input);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequestMapping("/api/v1/games")
@@ -37,11 +38,11 @@ public interface GameRestApi {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<Game>> listByCriteria(
             @RequestParam(required = false, defaultValue = Constants.DEFAULT_OFFSET)
-            @Min(value = Constants.MIN_OFFSET, message = Constants.OFFSET_INVALID_MSG) Long offset,
+            @Min(value = Constants.MIN_OFFSET, message = Constants.OFFSET_INVALID_MSG) Integer offset,
 
             @RequestParam(required = false, defaultValue = Constants.DEFAULT_LIMIT)
             @Min(value = Constants.MIN_LIMIT, message = Constants.LIMIT_INVALID_MSG)
-            @Max(value = Constants.MAX_LIMIT, message = Constants.LIMIT_INVALID_MSG) Long limit,
+            @Max(value = Constants.MAX_LIMIT, message = Constants.LIMIT_INVALID_MSG) Integer limit,
 
             @RequestParam(required = false)
             @Pattern(regexp = Constants.TITLE_REGEX, message = Constants.TITLE_INVALID_MSG) String title,
@@ -56,16 +57,16 @@ public interface GameRestApi {
             @Pattern(regexp = Constants.DEVELOPER_REGEX, message = Constants.DEVELOPER_INVALID_MSG) String developer,
 
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String releaseDate,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate releaseDate,
 
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String createdAt,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
 
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String from,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
 
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String to,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
 
             @RequestParam(required = false, defaultValue = Constants.DEFAULT_ORDER) List<OrderBy> orderByList,
 
