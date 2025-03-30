@@ -11,11 +11,11 @@ public interface GameDataProvider {
 
     Game create(GameCreate gameCreate);
 
-    Game findById(Long id);
+    Game findById(String id);
 
     List<Game> listByCriteria(ListByCriteriaUseCase.Input input);
 
-    Game update(Long id, GameUpdate gameUpdate);
+    Game update(String id, GameUpdate gameUpdate);
 
-    void delete(Long id);
+    void delete(String id);
 }

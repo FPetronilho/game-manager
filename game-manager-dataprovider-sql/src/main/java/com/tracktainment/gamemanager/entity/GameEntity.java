@@ -20,6 +20,9 @@ import java.time.LocalDate;
 @Table(name = "games")
 public class GameEntity extends BaseEntity {
 
+    @Column(name = "id", nullable = false, length = 36)
+    private String id;
+
     @Column(name = "title", nullable = false, length = 200)
     private String title;
 

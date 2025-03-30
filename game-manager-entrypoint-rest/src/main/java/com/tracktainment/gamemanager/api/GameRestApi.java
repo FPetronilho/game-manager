@@ -33,7 +33,9 @@ public interface GameRestApi {
             path = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    ResponseEntity<Game> findById(@PathVariable @Min(1) Long id);
+    ResponseEntity<Game> findById(
+            @PathVariable @Pattern(regexp = Constants.ID_REGEX, message = Constants.ID_INVALID_MSG) String id
+    );
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<List<Game>> listByCriteria(
@@ -79,10 +81,12 @@ public interface GameRestApi {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     ResponseEntity<Game> update(
-            @PathVariable @Min(1) Long id,
+            @PathVariable @Pattern(regexp = Constants.ID_REGEX, message = Constants.ID_INVALID_MSG) String id,
             @RequestBody @Valid GameUpdate gameUpdate
     );
 
     @DeleteMapping(path = "/{id}")
-    ResponseEntity<Void> delete(@PathVariable @Min(1) Long id);
+    ResponseEntity<Void> delete(
+            @PathVariable @Pattern(regexp = Constants.ID_REGEX, message = Constants.ID_INVALID_MSG) String id
+    );
 }

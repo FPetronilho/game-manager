@@ -14,6 +14,7 @@ import com.tracktainment.gamemanager.usecases.ListByCriteriaUseCase;
 import com.tracktainment.gamemanager.util.Constants;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class GameDataProviderSql implements GameDataProvider {
     private final EntityManager entityManager;
 
     @Override
+    @Transactional
     public Game create(GameCreate gameCreate) {
         if (existsByTitle(gameCreate.getTitle())) {
             throw new ResourceAlreadyExistsException(GameEntity.class, gameCreate.getTitle());
@@ -38,7 +40,7 @@ public class GameDataProviderSql implements GameDataProvider {
     }
 
     @Override
-    public Game findById(Long id) {
+    public Game findById(String id) {
         return mapper.toGame(findGameEntityById(id));
     }
 
@@ -62,18 +64,20 @@ public class GameDataProviderSql implements GameDataProvider {
     }
 
     @Override
-    public Game update(Long id, GameUpdate gameUpdate) {
+    @Transactional
+    public Game update(String id, GameUpdate gameUpdate) {
         GameEntity gameEntity = findGameEntityById(id);
         mapper.updateBookEntity(gameEntity, gameUpdate);
         return mapper.toGame(gameRepository.save(gameEntity));
     }
 
     @Override
-    public void delete(Long id) {
+    @Transactional
+    public void delete(String id) {
         if (existsById(id)) {
             gameRepository.deleteById(id);
         } else {
-            throw new ResourceNotFoundException(GameEntity.class, id.toString());
+            throw new ResourceNotFoundException(GameEntity.class, id);
         }
     }
 
@@ -81,14 +85,14 @@ public class GameDataProviderSql implements GameDataProvider {
         return gameRepository.findByTitle(title).isPresent();
     }
 
-    private boolean existsById(Long id) {
+    private boolean existsById(String id) {
         return gameRepository.findById(id).isPresent();
     }
 
-    private GameEntity findGameEntityById(Long id) {
+    private GameEntity findGameEntityById(String id) {
         return gameRepository.findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException(GameEntity.class, id.toString())
+                        () -> new ResourceNotFoundException(GameEntity.class, id)
                 );
     }
 

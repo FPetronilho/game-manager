@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Game {
 
-    private Long id;
+    private String id;
     private String title;
     private String platform;
     private String genre;

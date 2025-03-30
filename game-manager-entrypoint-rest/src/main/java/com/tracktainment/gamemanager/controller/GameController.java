@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -30,11 +29,6 @@ public class GameController implements GameRestApi {
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
 
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Hello, API is working!");
-    }
-
     @Override
     public ResponseEntity<Game> create(GameCreate gameCreate) {
         log.info("Creating game: {}", gameCreate);
@@ -47,7 +41,7 @@ public class GameController implements GameRestApi {
     }
 
     @Override
-    public ResponseEntity<Game> findById(Long id) {
+    public ResponseEntity<Game> findById(String id) {
         log.info("Finding game by ID: {}", id);
         FindByIdUseCase.Input input = FindByIdUseCase.Input.builder()
                 .id(id)
@@ -93,7 +87,7 @@ public class GameController implements GameRestApi {
     }
 
     @Override
-    public ResponseEntity<Game> update(Long id, GameUpdate gameUpdate) {
+    public ResponseEntity<Game> update(String id, GameUpdate gameUpdate) {
         log.info("Updating game by ID: {}. Updating to: {}", id, gameUpdate);
         UpdateUseCase.Input input = UpdateUseCase.Input.builder()
                 .id(id)
@@ -105,7 +99,7 @@ public class GameController implements GameRestApi {
     }
 
     @Override
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(String id) {
         log.info("Deleting game by ID: {}", id);
         DeleteUseCase.Input input = DeleteUseCase.Input.builder()
                 .id(id)
