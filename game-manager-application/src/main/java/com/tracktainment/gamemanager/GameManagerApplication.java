@@ -1,4 +1,4 @@
-package com.tracktainment.game_manager;
+package com.tracktainment.gamemanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

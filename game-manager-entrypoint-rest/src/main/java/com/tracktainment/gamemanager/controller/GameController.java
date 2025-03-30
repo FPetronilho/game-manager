@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -28,6 +29,11 @@ public class GameController implements GameRestApi {
     private final ListByCriteriaUseCase listByCriteriaUseCase;
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Hello, API is working!");
+    }
 
     @Override
     public ResponseEntity<Game> create(GameCreate gameCreate) {

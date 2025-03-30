@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@RequestMapping("/api/v1/games")
+@RequestMapping("api/v1/games")
 @Validated
 public interface GameRestApi {
 
@@ -27,7 +27,7 @@ public interface GameRestApi {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    ResponseEntity<Game> create(@Valid @RequestBody GameCreate gameCreate);
+    ResponseEntity<Game> create(@RequestBody @Valid GameCreate gameCreate);
 
     @GetMapping(
             path = "/{id}",
@@ -85,5 +85,4 @@ public interface GameRestApi {
 
     @DeleteMapping(path = "/{id}")
     ResponseEntity<Void> delete(@PathVariable @Min(1) Long id);
-
 }
