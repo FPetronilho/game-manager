@@ -12,7 +12,7 @@ public enum OrderBy {
     TITLE("title"),
     PLATFORM("platform"),
     GENRE("genre"),
-    CREATED_AT("created");
+    CREATED_AT("createdAt");
 
     private final String value;
 }

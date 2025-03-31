@@ -52,8 +52,8 @@ public class GameDataProviderSql implements GameDataProvider {
 
         Predicate[] predicates = buildPredicates(criteriaBuilder, root, input);
         criteriaQuery.where(predicates);
-        applyListSorting(criteriaBuilder, criteriaQuery, root, input);
 
+        applyListSorting(criteriaBuilder, criteriaQuery, root, input);
         return entityManager.createQuery(criteriaQuery)
                 .setFirstResult(input.getOffset() != null ? input.getOffset() : Constants.MIN_OFFSET)
                 .setMaxResults(input.getLimit() != null ? input.getLimit() : Integer.parseInt(Constants.DEFAULT_LIMIT))
