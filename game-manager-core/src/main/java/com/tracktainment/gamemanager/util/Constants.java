@@ -29,6 +29,16 @@ public class Constants {
     public static final String DEVELOPER_REGEX = "^[A-Za-z0-9&.,'\\-\\s]{1,150}$";
 
 
+    // Dux Manager Regex
+    public static final String GROUP_ID_REGEX = "[ \\wÀ-ú\\.:,;\\-\\[\\]()]{1,50}";
+    public static final String ARTIFACT_ID_REGEX = "[ \\wÀ-ú\\.:,;\\-\\[\\]()]{1,50}";
+    public static final String TYPE_REGEX = "[ \\wÀ-ú\\.:,;\\-\\[\\]()]{1,30}";
+    public static final String ID_LIST_REGEX =
+            "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})(," +
+                    "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){0," +
+                    (MAX_LIMIT-1) + "}$";
+
+
     // Fields validation
     public static final String ID_INVALID_MSG = "'id' must match: " + ID_REGEX + ".";
     public static final String TITLE_INVALID_MSG = "'title' must match: " + TITLE_REGEX + ".";
@@ -37,4 +47,12 @@ public class Constants {
     public static final String DEVELOPER_INVALID_MSG = "'developer' must match: " + DEVELOPER_REGEX + ".";
     public static final String OFFSET_INVALID_MSG = "'offset' must be positive.";
     public static final String LIMIT_INVALID_MSG = "'limit' must be in the range [" + MIN_LIMIT + ", " + MAX_LIMIT + "]";
+
+
+    // Dux Manager fields validation
+    public static final String GROUP_ID_INVALID_MSG = "'groupId' must match: " + GROUP_ID_REGEX + ".";
+    public static final String ARTIFACT_ID_INVALID_MSG = "'artifactId' must match: " + ARTIFACT_ID_REGEX + ".";
+    public static final String TYPE_INVALID_MSG = "'type' must match: " + TYPE_REGEX + ".";
+    public static final String DIGITAL_USER_ID_INVALID_MSG = "'digitalUserId' must match: " + ID_REGEX + ".";
+    public static final String IDS_INVALID_MSG = "'ids' must match: " + ID_LIST_REGEX + ".";
 }
