@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/game-manager-application/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/game-manager-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/game-manager-dataprovider-rest/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/game-manager-dataprovider-sql/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/game-manager-entrypoint-rest/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />

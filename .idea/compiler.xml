@@ -10,6 +10,7 @@
         <module name="game-manager-dataprovider-sql" />
         <module name="game-manager-entrypoint-rest" />
         <module name="game-manager-core" />
+        <module name="game-manager-dataprovider-rest" />
       </profile>
       <profile name="Annotation profile for Game Manager" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -33,6 +34,7 @@
       <module name="game-manager" options="" />
       <module name="game-manager-application" options="-parameters" />
       <module name="game-manager-core" options="-parameters" />
+      <module name="game-manager-dataprovider-rest" options="-parameters" />
       <module name="game-manager-dataprovider-sql" options="-parameters" />
       <module name="game-manager-entrypoint-rest" options="-parameters" />
     </option>

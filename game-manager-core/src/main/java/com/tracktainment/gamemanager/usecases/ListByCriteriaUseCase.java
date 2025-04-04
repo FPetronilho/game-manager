@@ -1,10 +1,12 @@
 package com.tracktainment.gamemanager.usecases;
 
+import com.tracktainment.gamemanager.dataprovider.DuxManagerDataProvider;
 import com.tracktainment.gamemanager.dataprovider.GameDataProvider;
 import com.tracktainment.gamemanager.domain.Game;
 import com.tracktainment.gamemanager.domain.OrderBy;
 import com.tracktainment.gamemanager.domain.OrderDirection;
-import com.tracktainment.gamemanager.exception.ParameterValidationFailedException;
+import com.tracktainment.gamemanager.dto.duxmanager.response.AssetResponse;
+import com.tracktainment.gamemanager.security.context.DigitalUser;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
@@ -16,38 +18,33 @@ import java.util.List;
 public class ListByCriteriaUseCase {
 
     private final GameDataProvider gameDataProvider;
+    private final DuxManagerDataProvider duxManagerDataProvider;
 
     public Output execute(Input input) {
-        inputTreatment(input);
-        inputValidation(input);
+        // Get the assets from Dux Manager
+        DigitalUser digitalUser = new DigitalUser();
+        digitalUser.setId("152f4696-ebbe-48da-8d7a-6b91ba216a14");
+
+        List<AssetResponse> assetResponseList = duxManagerDataProvider.findAssetsByCriteria(
+                input.getOffset(),
+                input.getLimit(),
+                digitalUser.getId(),
+                "",
+                "com.tracktainment",
+                "game-manager",
+                "game",
+                null,
+                null,
+                null
+        );
+
+        List<String> assetIds = assetResponseList.stream()
+                .map(AssetResponse::getExternalId)
+                .toList();
 
         return Output.builder()
                 .games(gameDataProvider.listByCriteria(input))
                 .build();
-    }
-
-    private void inputTreatment(Input input) {
-        if (input.getCreatedAt() != null) {
-            input.setTo(null);
-            input.setFrom(null);
-        }
-    }
-
-    private void inputValidation(Input input) {
-        if (input.getTo() != null && input.getFrom() != null && input.getTo().isBefore(input.getFrom())) {
-            throw new ParameterValidationFailedException("Invalid dates input: 'to' must be later than 'from'.");
-        }
-
-        if (input.getOrderByList().size() != input.getOrderDirectionList().size()) {
-            throw new ParameterValidationFailedException(
-                    String.format(
-                            "Invalid orderBy and orderDirection pair. " +
-                                    "'orderBy' size is %s and orderDirection size is %s. Both sizes must match",
-                            input.getOrderByList().size(),
-                            input.getOrderDirectionList().size()
-                    )
-            );
-        }
     }
 
     @AllArgsConstructor

@@ -6,6 +6,7 @@ import com.tracktainment.gamemanager.domain.OrderDirection;
 import com.tracktainment.gamemanager.dto.GameCreate;
 import com.tracktainment.gamemanager.dto.GameUpdate;
 import com.tracktainment.gamemanager.entity.GameEntity;
+import com.tracktainment.gamemanager.exception.ParameterValidationFailedException;
 import com.tracktainment.gamemanager.exception.ResourceAlreadyExistsException;
 import com.tracktainment.gamemanager.exception.ResourceNotFoundException;
 import com.tracktainment.gamemanager.mapper.GameMapperDataProvider;
@@ -46,6 +47,29 @@ public class GameDataProviderSql implements GameDataProvider {
 
     @Override
     public List<Game> listByCriteria(ListByCriteriaUseCase.Input input) {
+        // Input treatment
+        if (input.getCreatedAt() != null) {
+            input.setTo(null);
+            input.setFrom(null);
+        }
+
+        // Input validation
+        if (input.getTo() != null && input.getFrom() != null && input.getTo().isBefore(input.getFrom())) {
+            throw new ParameterValidationFailedException("Invalid dates input: 'to' must be later than 'from'.");
+        }
+
+        if (input.getOrderByList().size() != input.getOrderDirectionList().size()) {
+            throw new ParameterValidationFailedException(
+                    String.format(
+                            "Invalid orderBy and orderDirection pair. " +
+                                    "'orderBy' size is %s and orderDirection size is %s. Both sizes must match",
+                            input.getOrderByList().size(),
+                            input.getOrderDirectionList().size()
+                    )
+            );
+        }
+
+        // Method logic
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<GameEntity> criteriaQuery = criteriaBuilder.createQuery(GameEntity.class);
         Root<GameEntity> root = criteriaQuery.from(GameEntity.class);

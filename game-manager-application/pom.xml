@@ -39,6 +39,10 @@
 			<groupId>com.tracktainment</groupId>
 			<artifactId>game-manager-dataprovider-sql</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.tracktainment</groupId>
+			<artifactId>game-manager-dataprovider-rest</artifactId>
+		</dependency>
 	</dependencies>
 
 	<!-- #########################################################################  -->

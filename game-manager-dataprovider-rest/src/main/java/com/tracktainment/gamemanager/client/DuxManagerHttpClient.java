@@ -17,8 +17,7 @@ import java.util.List;
 
 @FeignClient(
         name = "dux-manager-http-client",
-        url = "${http.url.dux-manager}",
-        configuration = FeignClient.class
+        url = "${http.url.dux-manager}"
 )
 @Validated
 public interface DuxManagerHttpClient {

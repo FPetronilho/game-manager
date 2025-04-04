@@ -1,5 +1,6 @@
 package com.tracktainment.gamemanager.usecases;
 
+import com.tracktainment.gamemanager.dataprovider.DuxManagerDataProvider;
 import com.tracktainment.gamemanager.dataprovider.GameDataProvider;
 import com.tracktainment.gamemanager.domain.Game;
 import com.tracktainment.gamemanager.dto.GameUpdate;
@@ -11,8 +12,21 @@ import org.springframework.stereotype.Service;
 public class UpdateUseCase {
 
     private final GameDataProvider gameDataProvider;
+    private final FindByIdUseCase findByIdUseCase;
 
     public Output execute(Input input) {
+        /* Finds the game to update. Conditions necessary to retrieve the asset from Dux Manager, i.e. authenticate the
+        digital user, are already being processed in FindByIdUseCase
+         */
+        Game game = findByIdUseCase.execute(
+                FindByIdUseCase.Input.builder()
+                        .id(input.getId())
+                        .build()
+        ).getGame();
+
+        /* Update and return the updated game. No action is necessary on Dux Manage as it only stores information on
+        what assets each digital user has. It does not contain information of the game itself.
+         */
         return Output.builder()
                 .game(gameDataProvider.update(input.getId(), input.getGameUpdate()))
                 .build();

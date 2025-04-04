@@ -13,8 +13,8 @@ public class AssetRequest {
 
     private String externalId;
     private String type;
-    private AssetResponse.PermissionPolicy permissionPolicy;
-    private AssetResponse.ArtifactInformation artifactInformation;
+    private PermissionPolicy permissionPolicy;
+    private ArtifactInformation artifactInformation;
 
     @ToString
     @Getter

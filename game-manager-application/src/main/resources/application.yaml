@@ -28,3 +28,7 @@ spring.datasource:
   driver-class-name: org.postgresql.Driver
 
 spring.jpa.hibernate.ddl-auto: create
+
+###################  Data Provider REST configuration  ###################
+http.url:
+  dux-manager: "http://localhost:8081/dux-manager/api/v1"
