@@ -1,6 +1,5 @@
 package com.tracktainment.gamemanager.usecases;
 
-import com.tracktainment.gamemanager.dataprovider.DuxManagerDataProvider;
 import com.tracktainment.gamemanager.dataprovider.GameDataProvider;
 import com.tracktainment.gamemanager.domain.Game;
 import com.tracktainment.gamemanager.dto.GameUpdate;

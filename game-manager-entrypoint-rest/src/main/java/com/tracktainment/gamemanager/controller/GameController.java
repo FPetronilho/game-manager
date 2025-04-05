@@ -6,15 +6,18 @@ import com.tracktainment.gamemanager.domain.OrderBy;
 import com.tracktainment.gamemanager.domain.OrderDirection;
 import com.tracktainment.gamemanager.dto.GameCreate;
 import com.tracktainment.gamemanager.dto.GameUpdate;
+import com.tracktainment.gamemanager.exception.ParameterValidationFailedException;
 import com.tracktainment.gamemanager.usecases.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -55,6 +58,7 @@ public class GameController implements GameRestApi {
     public ResponseEntity<List<Game>> listByCriteria(
             Integer offset,
             Integer limit,
+            String ids,
             String title,
             String platform,
             String genre,
@@ -66,9 +70,35 @@ public class GameController implements GameRestApi {
             List<OrderBy> orderByList,
             List<OrderDirection> orderDirectionList
     ) {
+        // Input treatment
+        if (createdAt != null) {
+            to = null;
+            from = null;
+        }
+
+        // Input validation
+        if (to != null && from != null && to.isBefore(from)) {
+            throw new ParameterValidationFailedException("Invalid dates input: 'to' must be later than 'from'.");
+        }
+
+        if (orderByList.size() != orderDirectionList.size()) {
+            throw new ParameterValidationFailedException(
+                    String.format(
+                            "Invalid orderBy and orderDirection pair. " +
+                                    "'orderBy' size is %s and orderDirection size is %s. Both sizes must match",
+                            orderByList.size(),
+                            orderDirectionList.size()
+                    )
+            );
+        }
+
+        // Convert IDs to a list
+        List<String> idsList = StringUtils.hasText(ids) ? List.of(ids.split(",")) : null;
+
         ListByCriteriaUseCase.Input input = ListByCriteriaUseCase.Input.builder()
                 .offset(offset)
                 .limit(limit)
+                .ids(idsList)
                 .title(title)
                 .platform(platform)
                 .genre(genre)

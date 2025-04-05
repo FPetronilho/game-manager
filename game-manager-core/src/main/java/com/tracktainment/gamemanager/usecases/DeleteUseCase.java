@@ -16,7 +16,7 @@ public class DeleteUseCase {
     public void execute(Input input) {
         // Delete the asset in Dux Manager
         DigitalUser digitalUser = new DigitalUser();
-        digitalUser.setId("152f4696-ebbe-48da-8d7a-6b91ba216a14");
+        digitalUser.setId("1b63e584-8921-4bfe-bbcd-c04caa3e0790");
         duxManagerDataProvider.deleteAsset(digitalUser.getId(), input.getId());
 
         // TODO: Should there not be a condition to verify if asset was deleted? Like checking the HTTP status code?

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,13 +24,13 @@ public class ListByCriteriaUseCase {
     public Output execute(Input input) {
         // Get the assets from Dux Manager
         DigitalUser digitalUser = new DigitalUser();
-        digitalUser.setId("152f4696-ebbe-48da-8d7a-6b91ba216a14");
+        digitalUser.setId("1b63e584-8921-4bfe-bbcd-c04caa3e0790");
 
         List<AssetResponse> assetResponseList = duxManagerDataProvider.findAssetsByCriteria(
                 input.getOffset(),
                 input.getLimit(),
                 digitalUser.getId(),
-                "",
+                String.join(",", input.getIds()),
                 "com.tracktainment",
                 "game-manager",
                 "game",
@@ -38,10 +39,12 @@ public class ListByCriteriaUseCase {
                 null
         );
 
+        // Get a list of external IDs of the received assets
         List<String> assetIds = assetResponseList.stream()
                 .map(AssetResponse::getExternalId)
                 .toList();
 
+        input.setIds(assetIds);
         return Output.builder()
                 .games(gameDataProvider.listByCriteria(input))
                 .build();
@@ -54,6 +57,7 @@ public class ListByCriteriaUseCase {
     public static class Input {
         private Integer offset;
         private Integer limit;
+        private List<String> ids;
         private String title;
         private String platform;
         private String genre;

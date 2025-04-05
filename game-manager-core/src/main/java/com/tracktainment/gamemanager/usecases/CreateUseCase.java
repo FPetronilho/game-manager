@@ -27,7 +27,7 @@ public class CreateUseCase {
         // Save asset in Dux Manager
         try {
             DigitalUser digitalUser = new DigitalUser();
-            digitalUser.setId("152f4696-ebbe-48da-8d7a-6b91ba216a14");
+            digitalUser.setId("1b63e584-8921-4bfe-bbcd-c04caa3e0790");
             duxManagerDataProvider.createAsset(digitalUser.getId(), assetRequest);
         } catch (Exception e) {
             log.error("Could not create game in Dux Manager. Reason: {}", e.getMessage());

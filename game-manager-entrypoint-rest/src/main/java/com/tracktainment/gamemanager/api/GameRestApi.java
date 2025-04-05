@@ -47,6 +47,9 @@ public interface GameRestApi {
             @Max(value = Constants.MAX_LIMIT, message = Constants.LIMIT_INVALID_MSG) Integer limit,
 
             @RequestParam(required = false)
+            @Pattern(regexp = Constants.ID_LIST_REGEX, message = Constants.IDS_INVALID_MSG) String ids,
+
+            @RequestParam(required = false)
             @Pattern(regexp = Constants.TITLE_REGEX, message = Constants.TITLE_INVALID_MSG) String title,
 
             @RequestParam(required = false)
