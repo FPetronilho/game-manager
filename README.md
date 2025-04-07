@@ -55,6 +55,7 @@ The Game entity has the following attributes:
 - Maven
 - PostgreSQL or another compatible database
 - Access to DuxManager service
+- Docker (optional, for containerized deployment)
 
 ### Configuration
 
@@ -62,26 +63,66 @@ Create an `application.properties` or `application.yml` file with the following 
 
 ```properties
 # Database configuration
-spring.datasource.url=jdbc:postgresql://localhost:5432/game-manager
-spring.datasource.username=postgres
-spring.datasource.password=your_password
-spring.jpa.hibernate.ddl-auto=update
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/game-manager
+    username: postgres
+    password: your_password
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 # DuxManager service URL
-http.url.dux-manager=http://localhost:8080/dux-manager/api/v1
+http:
+  url:
+    dux-manager: http://localhost:8081/dux-manager/api/v1
 ```
 
 ### Building
 
+To build the application, run the following command:
 ```bash
 mvn clean package
 ```
 
 ### Running
 
+To run the application locally, use the following command:
 ```bash
 java -jar game-manager.jar
 ```
+
+### Docker Setup
+
+The game-manager application can now be containerized using Docker. To run the application in Docker, follow these steps:
+ - Step 1: Build the Docker Image - 
+Run the following command to build the Docker image:
+```
+docker-compose up --build
+```
+
+ - Step 2: Configure the DuxManager Service - 
+If the dux-manager service is running on your host machine (outside Docker), update the http.url.dux-manager property in the application.yml file to use host.docker.internal (for Windows/macOS) or the host machine's IP address (for Linux):
+```
+http:
+  url:
+    dux-manager: http://host.docker.internal:8081/dux-manager/api/v1
+```
+
+Alternatively, if you Dockerize the dux-manager service as well, ensure both services are part of the same Docker network and use the service name (dux-manager) as the hostname:
+```
+http:
+  url:
+    dux-manager: http://dux-manager:8081/dux-manager/api/v1
+```
+
+ - Step 3: Start the Containers - 
+Start the containers using the following command:
+```
+docker-compose up
+```
+
+The game-manager service will be accessible at http://localhost:8080, and it will communicate with the dux-manager service as configured.
 
 ## Error Handling
 
@@ -132,6 +173,7 @@ The service includes comprehensive validation for all inputs:
 - OkHttp
 - PostgreSQL
 - Maven
+- Docker
 
 ### Project Structure
 
@@ -158,7 +200,6 @@ com.tracktainment.gamemanager
 - Authentication and authorization;
 - Unit testing;
 - Update protocol from HTTP to HTTPS;
-- Dockerize application;
 - Database encryption;
 - CI/CD pipeline.
 
