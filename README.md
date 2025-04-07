@@ -152,3 +152,17 @@ com.tracktainment.gamemanager
 ├── usecases               # Business logic implementation
 └── util                   # Utility classes
 ```
+
+### Next Features
+
+- Authentication and authorization;
+- Unit testing;
+- Update protocol from HTTP to HTTPS;
+- Dockerize application;
+- Database encryption;
+- CI/CD pipeline.
+
+## Potential Tracktainment Upgrades
+
+- **Review Microservice**: A microservice to handle reviews of books, games and movies.
+- **Recommendation Microservice**: A microservice to handle books, games and movies recommendations based on what the user has consumed so far.
