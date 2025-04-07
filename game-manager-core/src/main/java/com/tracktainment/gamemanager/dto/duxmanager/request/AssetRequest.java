@@ -1,7 +1,6 @@
 package com.tracktainment.gamemanager.dto.duxmanager.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.tracktainment.gamemanager.dto.duxmanager.response.AssetResponse;
 import lombok.*;
 
 @NoArgsConstructor
