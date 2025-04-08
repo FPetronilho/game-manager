@@ -6,7 +6,7 @@ spring.application:
 # default port for HTTP:   80
 # default port for HTTPS: 443
 server:
-  port: 8080
+  port: 8082
   servlet.context-path: /${spring.application.name}
 
 logging.level:
@@ -31,4 +31,4 @@ spring.jpa.hibernate.ddl-auto: create
 
 ###################  Data Provider REST configuration  ###################
 http.url:
-  dux-manager: "http://localhost:8081/dux-manager/api/v1"
+  dux-manager: "http://dux-manager:8080/dux-manager/api/v1"

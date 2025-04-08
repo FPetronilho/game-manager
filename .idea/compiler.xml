@@ -8,6 +8,50 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
       </profile>
+      <profile name="Annotation profile for game-manager-core" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="D:/Users/jfgp_/.m2/repository/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
+          <entry name="D:/Users/jfgp_/.m2/repository/org/mapstruct/mapstruct-processor/1.6.2/mapstruct-processor-1.6.2.jar" />
+          <entry name="D:/Users/jfgp_/.m2/repository/org/mapstruct/mapstruct/1.6.2/mapstruct-1.6.2.jar" />
+        </processorPath>
+        <module name="game-manager-core" />
+      </profile>
+      <profile name="Annotation profile for game-manager-dataprovider-rest" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="D:/Users/jfgp_/.m2/repository/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
+          <entry name="D:/Users/jfgp_/.m2/repository/org/mapstruct/mapstruct-processor/1.6.2/mapstruct-processor-1.6.2.jar" />
+          <entry name="D:/Users/jfgp_/.m2/repository/org/mapstruct/mapstruct/1.6.2/mapstruct-1.6.2.jar" />
+        </processorPath>
+        <module name="game-manager-dataprovider-rest" />
+      </profile>
+      <profile name="Annotation profile for game-manager-dataprovider-sql" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="D:/Users/jfgp_/.m2/repository/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
+          <entry name="D:/Users/jfgp_/.m2/repository/org/mapstruct/mapstruct-processor/1.6.2/mapstruct-processor-1.6.2.jar" />
+          <entry name="D:/Users/jfgp_/.m2/repository/org/mapstruct/mapstruct/1.6.2/mapstruct-1.6.2.jar" />
+        </processorPath>
+        <module name="game-manager-dataprovider-sql" />
+      </profile>
+      <profile name="Annotation profile for game-manager-entrypoint-rest" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="D:/Users/jfgp_/.m2/repository/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
+          <entry name="D:/Users/jfgp_/.m2/repository/org/mapstruct/mapstruct-processor/1.6.2/mapstruct-processor-1.6.2.jar" />
+          <entry name="D:/Users/jfgp_/.m2/repository/org/mapstruct/mapstruct/1.6.2/mapstruct-1.6.2.jar" />
+        </processorPath>
+        <module name="game-manager-entrypoint-rest" />
+      </profile>
       <profile name="Annotation profile for Game Manager" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -19,42 +63,6 @@
           <entry name="D:/Users/jfgp_/.m2/repository/org/mapstruct/mapstruct/1.6.2/mapstruct-1.6.2.jar" />
         </processorPath>
         <module name="game-manager-application" />
-      </profile>
-      <profile name="Annotation profile for game-manager-core" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="D:/Users/jfgp_/.m2/repository/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
-        </processorPath>
-        <module name="game-manager-core" />
-      </profile>
-      <profile name="Annotation profile for game-manager-dataprovider-rest" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="D:/Users/jfgp_/.m2/repository/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
-        </processorPath>
-        <module name="game-manager-dataprovider-rest" />
-      </profile>
-      <profile name="Annotation profile for game-manager-dataprovider-sql" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="D:/Users/jfgp_/.m2/repository/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
-        </processorPath>
-        <module name="game-manager-dataprovider-sql" />
-      </profile>
-      <profile name="Annotation profile for game-manager-entrypoint-rest" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="D:/Users/jfgp_/.m2/repository/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
-        </processorPath>
-        <module name="game-manager-entrypoint-rest" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
