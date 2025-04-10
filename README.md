@@ -96,7 +96,7 @@ spring:
 # DuxManager service URL
 http:
   url:
-    dux-manager: http://localhost:8081/dux-manager/api/v1
+    dux-manager: http://localhost:8080/dux-manager/api/v1
 ```
 
 ### Building
@@ -132,7 +132,7 @@ docker network create shared-network
  ```
  http:
    url:
-     dux-manager: http://dux-manager:8081/dux-manager/api/v1
+     dux-manager: http://dux-manager:8080/dux-manager/api/v1
  ```
  - Step 4: Build the Docker Image - Run the following command to build the Docker image:
  ```
