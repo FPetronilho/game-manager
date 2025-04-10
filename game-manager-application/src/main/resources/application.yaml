@@ -22,13 +22,13 @@ springdoc:
 
 # #################### DB configuration
 spring.datasource:
-  url: jdbc:postgresql://localhost:5432/game-manager
-  username: postgres
-  password: 7346
+  url: ${POSTGRES_URL}
+  username: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}
   driver-class-name: org.postgresql.Driver
 
 spring.jpa.hibernate.ddl-auto: create
 
 ###################  Data Provider REST configuration  ###################
 http.url:
-  dux-manager: "http://dux-manager:8080/dux-manager/api/v1"
+  dux-manager: "${HTTP_URL_DUX_MANAGER}"
