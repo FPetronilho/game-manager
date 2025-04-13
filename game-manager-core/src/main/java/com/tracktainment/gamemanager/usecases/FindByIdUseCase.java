@@ -22,11 +22,9 @@ public class FindByIdUseCase {
     public Output execute(Input input) {
         // Get the asset from Dux Manager
         DigitalUser digitalUser = new DigitalUser();
-        digitalUser.setId("1b63e584-8921-4bfe-bbcd-c04caa3e0790");
+        digitalUser.setId("bd30e6d3-d51f-4548-910f-c93a25437259");
 
         List<AssetResponse> assetResponseList = duxManagerDataProvider.findAssetsByCriteria(
-                0,
-                10,
                 digitalUser.getId(),
                 input.getId(),
                 "com.tracktainment",

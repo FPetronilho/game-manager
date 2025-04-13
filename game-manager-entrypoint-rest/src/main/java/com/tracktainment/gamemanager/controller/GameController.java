@@ -12,12 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -92,13 +90,10 @@ public class GameController implements GameRestApi {
             );
         }
 
-        // Convert IDs to a list
-        List<String> idsList = StringUtils.hasText(ids) ? List.of(ids.split(",")) : null;
-
         ListByCriteriaUseCase.Input input = ListByCriteriaUseCase.Input.builder()
                 .offset(offset)
                 .limit(limit)
-                .ids(idsList)
+                .ids(ids)
                 .title(title)
                 .platform(platform)
                 .genre(genre)

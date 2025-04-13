@@ -104,39 +104,65 @@ public class GameDataProviderSql implements GameDataProvider {
         List<Predicate> predicates = new ArrayList<>();
 
         if (input.getIds() != null) {
-            predicates.add(root.get("id").in(input.getIds()));
+            List<String> ids = List.of(input.getIds().split(","));
+            predicates.add(criteriaBuilder.in(root.get("id")).value(ids));
         }
 
         if (input.getTitle() != null) {
-            predicates.add(criteriaBuilder.like(root.get("title"), "%s" + input.getTitle() + "%s"));
+            predicates.add(criteriaBuilder.like(
+                    root.get("title"),
+                    "%" + input.getTitle() + "%"
+            ));
         }
 
+
         if (input.getPlatform() != null) {
-            predicates.add(criteriaBuilder.like(root.get("platform"), "%s" + input.getPlatform() + "%s"));
+            predicates.add(criteriaBuilder.like(
+                    root.get("platform"),
+                    "%" + input.getPlatform() + "%"
+            ));
         }
 
         if (input.getGenre() != null) {
-            predicates.add(criteriaBuilder.like(root.get("genre"), "%s" + input.getGenre() + "%s"));
+            predicates.add(criteriaBuilder.like(
+                    root.get("genre"),
+                    "%" + input.getGenre() + "%"
+            ));
         }
 
         if (input.getDeveloper() != null) {
-            predicates.add(criteriaBuilder.like(root.get("developer"), "%s" + input.getDeveloper() + "%s"));
+            predicates.add(criteriaBuilder.like(
+                    root.get("developer"),
+                    "%" + input.getDeveloper() + "%"
+            ));
         }
 
         if (input.getReleaseDate() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("releaseDate"), input.getReleaseDate()));
+            predicates.add(criteriaBuilder.equal(
+                    root.get("releaseDate"),
+                    input.getReleaseDate().atStartOfDay()
+            ));
         }
 
         if (input.getCreatedAt() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("createdAt"), input.getCreatedAt()));
+            predicates.add(criteriaBuilder.between(
+                    root.get("createdAt"),
+                    input.getCreatedAt().atStartOfDay(),
+                    input.getCreatedAt().atTime(23, 59, 59, 999999999)
+            ));
         }
 
         if (input.getFrom() != null) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("from"), input.getFrom()));
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+                    root.get("createdAt"),
+                    input.getFrom().atStartOfDay()));
         }
 
         if (input.getTo() != null) {
-            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("to"), input.getTo()));
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(
+                    root.get("createdAt"),
+                    input.getTo().atTime(23, 59, 59, 999999999)
+            ));
         }
 
         return predicates.toArray(new Predicate[0]);

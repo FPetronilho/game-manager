@@ -9,9 +9,11 @@ import com.tracktainment.gamemanager.dto.duxmanager.response.AssetResponse;
 import com.tracktainment.gamemanager.security.context.DigitalUser;
 import lombok.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,25 +25,32 @@ public class ListByCriteriaUseCase {
     public Output execute(Input input) {
         // Get the assets from Dux Manager
         DigitalUser digitalUser = new DigitalUser();
-        digitalUser.setId("1b63e584-8921-4bfe-bbcd-c04caa3e0790");
+        digitalUser.setId("bd30e6d3-d51f-4548-910f-c93a25437259");
 
         List<AssetResponse> assetResponseList = duxManagerDataProvider.findAssetsByCriteria(
-                input.getOffset(),
-                input.getLimit(),
                 digitalUser.getId(),
-                String.join(",", input.getIds()),
+                input.getIds(),
                 "com.tracktainment",
                 "game-manager",
                 "game",
-                null,
-                null,
-                null
+                input.getCreatedAt(),
+                input.getFrom(),
+                input.getTo()
         );
 
-        // Get a list of external IDs of the received assets
-        List<String> assetIds = assetResponseList.stream()
+        // Get IDs of the received assets
+        String assetIds = assetResponseList.stream()
                 .map(AssetResponse::getExternalId)
-                .toList();
+                .collect(Collectors.joining(","));
+
+        boolean idsInputIsEmpty = input.getIds() == null;
+        if (!StringUtils.hasText(assetIds)) {
+            if (!idsInputIsEmpty) {
+                assetIds = input.getIds();
+            } else {
+                assetIds = null;
+            }
+        }
 
         input.setIds(assetIds);
         return Output.builder()
@@ -56,7 +65,7 @@ public class ListByCriteriaUseCase {
     public static class Input {
         private Integer offset;
         private Integer limit;
-        private List<String> ids;
+        private String ids;
         private String title;
         private String platform;
         private String genre;
