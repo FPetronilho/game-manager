@@ -12,11 +12,11 @@ services:
 
   game-manager:
     build:
-      context: .
+      context: ../..
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "8082:8082"
+      - "8445:8445"
     environment:
       SPRING_DATASOURCE_URL: ${POSTGRES_URL}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
