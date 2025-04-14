@@ -15,15 +15,16 @@ public class UpdateUseCase {
 
     public Output execute(Input input) {
         /* Finds the game to update. Conditions necessary to retrieve the asset from Dux Manager, i.e. authenticate the
-        digital user, are already being processed in FindByIdUseCase
+        digital user, etc. are already being processed in FindByIdUseCase
          */
         Game game = findByIdUseCase.execute(
                 FindByIdUseCase.Input.builder()
+                        .jwt(input.getJwt())
                         .id(input.getId())
                         .build()
         ).getGame();
 
-        /* Update and return the updated game. No action is necessary on Dux Manage as it only stores information on
+        /* Update and return the updated game. No action is necessary on Dux Manager as it only stores information on
         what assets each digital user has. It does not contain information of the game itself.
          */
         return Output.builder()
@@ -36,6 +37,7 @@ public class UpdateUseCase {
     @Data
     @Builder
     public static class Input {
+        private String jwt;
         private String id;
         private GameUpdate gameUpdate;
     }

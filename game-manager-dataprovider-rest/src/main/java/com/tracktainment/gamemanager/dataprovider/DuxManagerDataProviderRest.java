@@ -18,12 +18,21 @@ public class DuxManagerDataProviderRest implements DuxManagerDataProvider {
     private final DuxManagerHttpClient duxManagerHttpClient;
 
     @Override
-    public AssetResponse createAsset(String digitalUserId, AssetRequest assetRequest) {
-        return duxManagerHttpClient.createAsset(digitalUserId, assetRequest);
+    public AssetResponse createAsset(
+            String jwt,
+            String digitalUserId,
+            AssetRequest assetRequest
+    ) {
+        return duxManagerHttpClient.createAsset(
+                jwt,
+                digitalUserId,
+                assetRequest
+        );
     }
 
     @Override
     public List<AssetResponse> findAssetsByCriteria(
+            String jwt,
             String digitalUserId,
             String externalIds,
             String groupId,
@@ -34,6 +43,7 @@ public class DuxManagerDataProviderRest implements DuxManagerDataProvider {
             LocalDate to
     ) {
         return duxManagerHttpClient.findAssetsByCriteria(
+                jwt,
                 digitalUserId,
                 externalIds,
                 groupId,
@@ -46,7 +56,15 @@ public class DuxManagerDataProviderRest implements DuxManagerDataProvider {
     }
 
     @Override
-    public void deleteAsset(String digitalUserId, String externalId) {
-        duxManagerHttpClient.deleteAssetByExternalId(digitalUserId, externalId);
+    public void deleteAsset(
+            String jwt,
+            String digitalUserId,
+            String externalId
+    ) {
+        duxManagerHttpClient.deleteAssetByExternalId(
+                jwt,
+                digitalUserId,
+                externalId
+        );
     }
 }

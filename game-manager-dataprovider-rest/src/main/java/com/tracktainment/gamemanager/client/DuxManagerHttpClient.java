@@ -22,6 +22,8 @@ public interface DuxManagerHttpClient {
 
     @PostMapping("/assets/digitalUsers/{digitalUserId}")
     AssetResponse createAsset(
+            @RequestHeader("Authorization") String authorization,
+
             @PathVariable
             @Pattern(regexp = Constants.ID_REGEX, message = Constants.DIGITAL_USER_ID_INVALID_MSG) String digitalUserId,
 
@@ -30,6 +32,8 @@ public interface DuxManagerHttpClient {
 
     @GetMapping("/assets")
     List<AssetResponse> findAssetsByCriteria(
+            @RequestHeader("Authorization") String authorization,
+
             @RequestParam()
             @Pattern(regexp = Constants.ID_REGEX, message = Constants.DIGITAL_USER_ID_INVALID_MSG) String digitalUserId,
 
@@ -57,6 +61,8 @@ public interface DuxManagerHttpClient {
 
     @DeleteMapping("/assets")
     void deleteAssetByExternalId(
+            @RequestHeader("Authorization") String authorization,
+
             @RequestParam
             @Pattern(regexp = Constants.ID_REGEX, message = Constants.DIGITAL_USER_ID_INVALID_MSG) String digitalUserId,
 

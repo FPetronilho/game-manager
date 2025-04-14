@@ -8,6 +8,7 @@ import com.tracktainment.gamemanager.dto.GameCreate;
 import com.tracktainment.gamemanager.dto.GameUpdate;
 import com.tracktainment.gamemanager.exception.ParameterValidationFailedException;
 import com.tracktainment.gamemanager.usecases.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,11 +30,15 @@ public class GameController implements GameRestApi {
     private final ListByCriteriaUseCase listByCriteriaUseCase;
     private final UpdateUseCase updateUseCase;
     private final DeleteUseCase deleteUseCase;
+    private final HttpServletRequest httpServletRequest;
 
     @Override
     public ResponseEntity<Game> create(GameCreate gameCreate) {
         log.info("Creating game: {}", gameCreate);
+        String jwt = httpServletRequest.getHeader("Authorization");
+
         CreateUseCase.Input input = CreateUseCase.Input.builder()
+                .jwt(jwt)
                 .gameCreate(gameCreate)
                 .build();
 
@@ -44,7 +49,10 @@ public class GameController implements GameRestApi {
     @Override
     public ResponseEntity<Game> findById(String id) {
         log.info("Finding game by ID: {}", id);
+        String jwt = httpServletRequest.getHeader("Authorization");
+
         FindByIdUseCase.Input input = FindByIdUseCase.Input.builder()
+                .jwt(jwt)
                 .id(id)
                 .build();
 
@@ -90,7 +98,11 @@ public class GameController implements GameRestApi {
             );
         }
 
+        // Get jwt
+        String jwt = httpServletRequest.getHeader("Authorization");
+
         ListByCriteriaUseCase.Input input = ListByCriteriaUseCase.Input.builder()
+                .jwt(jwt)
                 .offset(offset)
                 .limit(limit)
                 .ids(ids)
@@ -114,7 +126,10 @@ public class GameController implements GameRestApi {
     @Override
     public ResponseEntity<Game> update(String id, GameUpdate gameUpdate) {
         log.info("Updating game by ID: {}. Updating to: {}", id, gameUpdate);
+        String jwt = httpServletRequest.getHeader("Authorization");
+
         UpdateUseCase.Input input = UpdateUseCase.Input.builder()
+                .jwt(jwt)
                 .id(id)
                 .gameUpdate(gameUpdate)
                 .build();
@@ -126,7 +141,10 @@ public class GameController implements GameRestApi {
     @Override
     public ResponseEntity<Void> delete(String id) {
         log.info("Deleting game by ID: {}", id);
+        String jwt = httpServletRequest.getHeader("Authorization");
+
         DeleteUseCase.Input input = DeleteUseCase.Input.builder()
+                .jwt(jwt)
                 .id(id)
                 .build();
 

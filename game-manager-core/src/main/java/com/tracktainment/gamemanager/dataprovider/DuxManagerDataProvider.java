@@ -8,9 +8,14 @@ import java.util.List;
 
 public interface DuxManagerDataProvider {
 
-    AssetResponse createAsset(String digitalUserId, AssetRequest assetRequest);
+    AssetResponse createAsset(
+            String jwt,
+            String digitalUserId,
+            AssetRequest assetRequest
+    );
 
     List<AssetResponse> findAssetsByCriteria(
+            String jwt,
             String digitalUserId,
             String externalIds,
             String groupId,
@@ -21,5 +26,9 @@ public interface DuxManagerDataProvider {
             LocalDate to
     );
 
-    void deleteAsset(String digitalUserId, String externalId);
+    void deleteAsset(
+            String jwt,
+            String digitalUserId,
+            String externalId
+    );
 }

@@ -6,6 +6,7 @@ import com.tracktainment.gamemanager.domain.Game;
 import com.tracktainment.gamemanager.dto.duxmanager.response.AssetResponse;
 import com.tracktainment.gamemanager.exception.ResourceNotFoundException;
 import com.tracktainment.gamemanager.security.context.DigitalUser;
+import com.tracktainment.gamemanager.security.util.SecurityUtil;
 import lombok.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -18,13 +19,15 @@ public class FindByIdUseCase {
 
     private final GameDataProvider gameDataProvider;
     private final DuxManagerDataProvider duxManagerDataProvider;
+    private final SecurityUtil securityUtil;
 
     public Output execute(Input input) {
-        // Get the asset from Dux Manager
-        DigitalUser digitalUser = new DigitalUser();
-        digitalUser.setId("bd30e6d3-d51f-4548-910f-c93a25437259");
+        // Get digital user from jwt
+        DigitalUser digitalUser = securityUtil.getDigitalUser();
 
+        // Get asset from dux-manager
         List<AssetResponse> assetResponseList = duxManagerDataProvider.findAssetsByCriteria(
+                input.getJwt(),
                 digitalUser.getId(),
                 input.getId(),
                 "com.tracktainment",
@@ -51,6 +54,7 @@ public class FindByIdUseCase {
     @Data
     @Builder
     public static class Input {
+        private String jwt;
         private String id;
     }
 
