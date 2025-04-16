@@ -192,10 +192,12 @@ The service includes comprehensive validation for all inputs:
 - Lombok
 - MapStruct
 - Logging with SLF4J
-- OkHttp
 - PostgreSQL
 - Maven
 - Docker
+- OAuth2/JWT authentication
+- Swagger documentation
+- HTTPS enabled via SSL certificates
 
 ### Project Structure
 
@@ -219,9 +221,7 @@ com.tracktainment.gamemanager
 
 ### Next Features
 
-- Authentication and authorization;
 - Unit testing;
-- Update protocol from HTTP to HTTPS;
 - Database encryption;
 - CI/CD pipeline.
 
