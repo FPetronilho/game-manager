@@ -1,5 +1,6 @@
 package com.tracktainment.gamemanager.security.util;
 
+import com.tracktainment.gamemanager.exception.AuthenticationFailedException;
 import com.tracktainment.gamemanager.security.context.DigitalUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -15,7 +16,7 @@ public class SecurityUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !(authentication.getPrincipal() instanceof Jwt jwt)) {
-            throw new IllegalStateException("JWT not found in security context.");
+            throw new AuthenticationFailedException("JWT not found in security context.");
         }
 
         DigitalUser digitalUser = new DigitalUser();
