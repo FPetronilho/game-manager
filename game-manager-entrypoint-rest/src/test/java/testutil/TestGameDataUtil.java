@@ -16,19 +16,19 @@ public class TestGameDataUtil {
     public static GameCreate createTestGameCreate() {
         return GameCreate.builder()
                 .title("The Last of Us Part II")
-                .platform("PlayStation 5")
+                .platform("PS5")
                 .genre("Action")
-                .developer("Naughty Dog")
+                .developer("Naughty-Dog")
                 .releaseDate(LocalDate.of(2020, 6, 19))
                 .build();
     }
 
     public static GameUpdate createTestGameUpdate() {
         return GameUpdate.builder()
-                .title("The Last of Us Part II: Remastered")
-                .platform("PlayStation 5")
-                .genre("Action Adventure")
-                .developer("Naughty Dog")
+                .title("The Last of Us Part II Remastered")
+                .platform("PS5")
+                .genre("Action")
+                .developer("Naughty-Dog")
                 .releaseDate(LocalDate.of(2021, 6, 19))
                 .build();
     }

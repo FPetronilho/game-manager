@@ -53,4 +53,31 @@ class AssetMapperTest {
         assertEquals("game", result.getType());
         assertEquals(AssetRequest.PermissionPolicy.OWNER, result.getPermissionPolicy());
     }
+
+    @Test
+    void shouldSetCorrectPermissionPolicy() {
+        // Arrange
+        Game game = TestGameDataUtil.createTestGame();
+
+        // Act
+        AssetRequest result = AssetMapper.toAssetRequest(game);
+
+        // Assert
+        assertEquals(AssetRequest.PermissionPolicy.OWNER, result.getPermissionPolicy());
+    }
+
+    @Test
+    void shouldSetCorrectArtifactInformation() {
+        // Arrange
+        Game game = TestGameDataUtil.createTestGame();
+
+        // Act
+        AssetRequest result = AssetMapper.toAssetRequest(game);
+
+        // Assert
+        assertNotNull(result.getArtifactInformation());
+        assertEquals("com.tracktainment", result.getArtifactInformation().getGroupId());
+        assertEquals("game-manager", result.getArtifactInformation().getArtifactId());
+        assertEquals("0.0.1-SNAPSHOT", result.getArtifactInformation().getVersion());
+    }
 }
