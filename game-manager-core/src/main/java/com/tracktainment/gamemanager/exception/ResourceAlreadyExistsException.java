@@ -2,7 +2,7 @@ package com.tracktainment.gamemanager.exception;
 
 public class ResourceAlreadyExistsException extends BusinessException {
 
-    private static final String ERROR_MESSAGE = "%s %s already exists.";
+    public static final String ERROR_MESSAGE = "%s %s already exists.";
 
     public ResourceAlreadyExistsException(Class<?> clazz, String resourceAttribute) {
         super(
