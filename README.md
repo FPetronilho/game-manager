@@ -1,9 +1,7 @@
 # Game Manager Microservice
-
 The Game Manager microservice is part of the Tracktainment application, which is designed to track books, movies, and games consumed by users. This microservice is responsible for managing games and their associated metadata. It integrates with the Dux Manager microservice to manage digital user assets.
 
 ## Table of Contents
-
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Features](#features)
@@ -23,11 +21,9 @@ The Game Manager microservice is part of the Tracktainment application, which is
 - [Potential Tracktainment Upgrades](#potential-tracktainment-upgrades)
 
 ## Overview
-
 Game Manager is a microservice application that provides RESTful APIs for managing games. It follows clean architecture principles with a clear separation of concerns, making it maintainable, testable, and scalable. The application allows users to create, read, update, and delete games, while also integrating with an external system (DUX Manager) for asset management.
 
 ## Architecture
-
 The project follows a clean architecture with clear separation of concerns:
 
 - **Application Module**: Handles application configuration and properties
@@ -37,17 +33,18 @@ The project follows a clean architecture with clear separation of concerns:
 - **Entry Point REST Module**: REST API controllers and resources
 
 ## Features
-
-- Complete CRUD operations for game entities
-- Advanced filtering and search capabilities
-- Sorting by various game attributes
-- Integration with DuxManager for asset tracking
-- OAuth2 security with JWT
-- Swagger/OpenAPI documentation
-- Comprehensive validation and exception handling
+- Complete CRUD operations for entities;
+- Advanced filtering and search capabilities;
+- Sorting by various attributes;
+- Feign Client Integration with DuxManager for asset tracking;
+- Comprehensive validation and error handling;
+- Design Patterns integration (DTO, Builder, Factory and Code Generation);
+- Docker containerization for deployment;
+- OAuth2/JWT authentication;
+- Swagger documentation;
+- Comprehensive unit testing with JUnit & Mockito with over 85% line coverage.
 
 ## Tech Stack
-
 - Java 17
 - Spring Boot 3.3.4
 - Spring Data JPA
@@ -64,7 +61,6 @@ The project follows a clean architecture with clear separation of concerns:
 - JUnit 5 & Mockito
 
 ### Project Structure
-
 ```
 game-manager
 ├── game-manager-application           # Spring Boot application module│
@@ -103,7 +99,6 @@ game-manager
 ```
 
 ## API Endpoints
-
 | Method |       Endpoint       |       Description       |
 |--------|----------------------|-------------------------|
 | POST   | `/api/v1/games`      | Create a new game       |
@@ -202,7 +197,6 @@ The service provides structured error responses with the following format:
   "message": "Game your-game-id not found."
 }
 ```
-
 Common error codes:
 - `E-001`: Internal server error
 - `E-002`: Resource not found
@@ -210,14 +204,12 @@ Common error codes:
 - `E-007`: Parameter validation error
 
 ## Validation
-
 The service includes comprehensive validation for all inputs:
 - Game title, platform, genre and developer validation
 - Date format validation
 - Query parameter validation
 
 ## Integration with DuxManager
-
 The Game Manager service integrates with DuxManager for asset tracking. Each game created in the system is also registered as an asset in DuxManager with the following attributes:
 - `externalId`: Game ID
 - `type`: "game"
@@ -225,12 +217,9 @@ The Game Manager service integrates with DuxManager for asset tracking. Each gam
 - `artifactInformation`: Contains group, artifact, and version details
 
 ## Next Features
-
-- Database encryption;
 - CI/CD pipeline.
 
 ## Potential Tracktainment Upgrades
-
 - **Review Microservice**: A microservice to handle reviews of books, games and movies.
 - **Recommendation Microservice**: A microservice to handle books, games and movies recommendations based on what the user has consumed so far.
 - **Notification Microservice** : A microservice to send notifications to users about recommendations.
