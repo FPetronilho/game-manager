@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@SpringBootApplication(scanBasePackages = {"com.tracktainment.gamemanager"})
+@SpringBootApplication(scanBasePackages = {"com.tracktainment.gamemanager", "com.playground"})
 @EnableJpaAuditing
 @EnableFeignClients
 public class GameManagerApplication {

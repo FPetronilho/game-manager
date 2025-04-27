@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class DuxManagerDataProviderRestAdditionalTest {
+class DuxManagerDataProviderRestTest {
 
     @Mock
     private DuxManagerHttpClient duxManagerHttpClient;
