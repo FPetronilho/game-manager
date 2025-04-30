@@ -1,7 +1,10 @@
 package security;
 
+import com.tracktainment.gamemanager.security.config.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Bean;
@@ -10,12 +13,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.mock;
+import java.lang.reflect.Method;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +34,12 @@ class SecurityConfigTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Mock
+    private HttpSecurity httpSecurity;
+
+    @InjectMocks
+    private SecurityConfig securityConfig;
 
     @Test
     void shouldPermitAccessToSwaggerEndpoints() throws Exception {
@@ -83,6 +96,35 @@ class SecurityConfigTest {
                     .csrf(AbstractHttpConfigurer::disable);  // Disable CSRF for simplicity in tests
 
             return http.build();
+        }
+    }
+
+    @Test
+    void shouldHaveProperSecurityAnnotations() {
+        org.springframework.context.annotation.Configuration configAnnotation =
+                SecurityConfig.class.getAnnotation(org.springframework.context.annotation.Configuration.class);
+        assertNotNull(configAnnotation, "Configuration annotation should be present");
+
+        org.springframework.security.config.annotation.web.configuration.EnableWebSecurity webSecurityAnnotation =
+                SecurityConfig.class.getAnnotation(org.springframework.security.config.annotation.web.configuration.EnableWebSecurity.class);
+        assertNotNull(webSecurityAnnotation, "EnableWebSecurity annotation should be present");
+    }
+
+    @Test
+    void shouldHaveSecurityFilterChainBean() {
+        // Verify securityFilterChain method has @Bean annotation
+        try {
+            Method securityFilterChainMethod = SecurityConfig.class.getDeclaredMethod("securityFilterChain", HttpSecurity.class);
+            org.springframework.context.annotation.Bean beanAnnotation =
+                    securityFilterChainMethod.getAnnotation(org.springframework.context.annotation.Bean.class);
+
+            assertNotNull(beanAnnotation, "Bean annotation should be present on securityFilterChain method");
+
+            // Verify return type
+            assertEquals(SecurityFilterChain.class, securityFilterChainMethod.getReturnType(),
+                    "securityFilterChain method should return SecurityFilterChain");
+        } catch (NoSuchMethodException e) {
+            fail("securityFilterChain method should exist in SecurityConfig class", e);
         }
     }
 }

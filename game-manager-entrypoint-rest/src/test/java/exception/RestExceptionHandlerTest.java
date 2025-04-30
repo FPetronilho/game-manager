@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -222,5 +221,93 @@ class RestExceptionHandlerTest {
         assertEquals(exceptionDto, response.getBody());
 
         verify(mapper).toExceptionDto(any(InternalServerErrorException.class));
+    }
+
+    @Test
+    void shouldHandleEachExceptionCodeType() {
+        for (ExceptionCode exceptionCode : ExceptionCode.values()) {
+            // Arrange
+            String errorMessage = "Test error for " + exceptionCode.name();
+            BusinessException exception = new BusinessException(exceptionCode, errorMessage);
+
+            ExceptionDto expectedDto = ExceptionDto.builder()
+                    .code(exceptionCode.getCode())
+                    .httpStatusCode(exceptionCode.getHttpStatusCode())
+                    .reason(exceptionCode.getReason())
+                    .message(errorMessage)
+                    .build();
+
+            when(mapper.toExceptionDto(exception))
+                    .thenReturn(expectedDto);
+
+            // Act
+            ResponseEntity<ExceptionDto> response = handler.handleBusinessException(exception);
+
+            // Assert
+            assertNotNull(response);
+            assertEquals(exceptionCode.getHttpStatusCode(), response.getStatusCodeValue());
+            assertEquals(expectedDto, response.getBody());
+            assertEquals(errorMessage, response.getBody().getMessage());
+
+            // Verify
+            verify(mapper).toExceptionDto(exception);
+        }
+    }
+
+    @Test
+    void shouldHandleVariousRuntimeExceptions() {
+        // Arrange
+        RuntimeException[] exceptions = {
+                new NullPointerException("Null reference"),
+                new IllegalArgumentException("Invalid argument"),
+                new UnsupportedOperationException("Operation not supported"),
+                new IllegalStateException("Invalid state")
+        };
+
+        for (RuntimeException exception : exceptions) {
+            ExceptionDto exceptionDto = ExceptionDto.builder()
+                    .code(ExceptionCode.INTERNAL_SERVER_ERROR.getCode())
+                    .httpStatusCode(ExceptionCode.INTERNAL_SERVER_ERROR.getHttpStatusCode())
+                    .reason(ExceptionCode.INTERNAL_SERVER_ERROR.getReason())
+                    .message(exception.getMessage())
+                    .build();
+
+            when(mapper.toExceptionDto(any(InternalServerErrorException.class)))
+                    .thenReturn(exceptionDto);
+
+            // Act
+            ResponseEntity<ExceptionDto> response = handler.handleGlobalException(exception);
+
+            // Assert
+            assertNotNull(response);
+            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatusCodeValue());
+            assertEquals(exceptionDto, response.getBody());
+            assertEquals(exception.getMessage(), response.getBody().getMessage());
+        }
+    }
+
+    @Test
+    void shouldHandleCheckedExceptions() {
+        // Arrange
+        Exception exception = new Exception("Checked exception");
+
+        ExceptionDto exceptionDto = ExceptionDto.builder()
+                .code(ExceptionCode.INTERNAL_SERVER_ERROR.getCode())
+                .httpStatusCode(ExceptionCode.INTERNAL_SERVER_ERROR.getHttpStatusCode())
+                .reason(ExceptionCode.INTERNAL_SERVER_ERROR.getReason())
+                .message(exception.getMessage())
+                .build();
+
+        when(mapper.toExceptionDto(any(InternalServerErrorException.class)))
+                .thenReturn(exceptionDto);
+
+        // Act
+        ResponseEntity<ExceptionDto> response = handler.handleGlobalException(exception);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatusCodeValue());
+        assertEquals(exceptionDto, response.getBody());
+        assertEquals(exception.getMessage(), response.getBody().getMessage());
     }
 }

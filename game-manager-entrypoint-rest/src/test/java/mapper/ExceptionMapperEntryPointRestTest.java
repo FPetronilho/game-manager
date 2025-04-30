@@ -169,4 +169,98 @@ class ExceptionMapperEntryPointRestTest {
         // Assert
         assertNull(result);
     }
+
+    @Test
+    void shouldMapAllBusinessExceptionTypes() {
+        String resourceId = UUID.randomUUID().toString();
+        String errorMessage = "Test error message";
+
+        // ResourceNotFoundException
+        ResourceNotFoundException resourceNotFoundException = new ResourceNotFoundException(Game.class, resourceId);
+        ExceptionDto resourceNotFoundDto = mapper.toExceptionDto(resourceNotFoundException);
+        assertEquals(ExceptionCode.RESOURCE_NOT_FOUND.getCode(), resourceNotFoundDto.getCode());
+        assertEquals(HttpStatus.NOT_FOUND.value(), resourceNotFoundDto.getHttpStatusCode());
+
+        // ResourceAlreadyExistsException
+        ResourceAlreadyExistsException resourceAlreadyExistsException =
+                new ResourceAlreadyExistsException(Game.class, resourceId);
+        ExceptionDto resourceAlreadyExistsDto = mapper.toExceptionDto(resourceAlreadyExistsException);
+        assertEquals(ExceptionCode.RESOURCE_ALREADY_EXISTS.getCode(), resourceAlreadyExistsDto.getCode());
+        assertEquals(HttpStatus.CONFLICT.value(), resourceAlreadyExistsDto.getHttpStatusCode());
+
+        // AuthenticationFailedException
+        AuthenticationFailedException authenticationFailedException =
+                new AuthenticationFailedException(errorMessage);
+        ExceptionDto authenticationFailedDto = mapper.toExceptionDto(authenticationFailedException);
+        assertEquals(ExceptionCode.CLIENT_NOT_AUTHENTICATED.getCode(), authenticationFailedDto.getCode());
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), authenticationFailedDto.getHttpStatusCode());
+
+        // AuthorizationFailedException
+        AuthorizationFailedException authorizationFailedException =
+                new AuthorizationFailedException(errorMessage);
+        ExceptionDto authorizationFailedDto = mapper.toExceptionDto(authorizationFailedException);
+        assertEquals(ExceptionCode.CLIENT_NOT_AUTHORIZED.getCode(), authorizationFailedDto.getCode());
+        assertEquals(HttpStatus.FORBIDDEN.value(), authorizationFailedDto.getHttpStatusCode());
+
+        // ParameterValidationFailedException
+        ParameterValidationFailedException parameterValidationFailedException =
+                new ParameterValidationFailedException(errorMessage);
+        ExceptionDto parameterValidationFailedDto = mapper.toExceptionDto(parameterValidationFailedException);
+        assertEquals(ExceptionCode.PARAMETER_VALIDATION_ERROR.getCode(), parameterValidationFailedDto.getCode());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), parameterValidationFailedDto.getHttpStatusCode());
+
+        // InternalServerErrorException
+        InternalServerErrorException internalServerErrorException =
+                new InternalServerErrorException(errorMessage);
+        ExceptionDto internalServerErrorDto = mapper.toExceptionDto(internalServerErrorException);
+        assertEquals(ExceptionCode.INTERNAL_SERVER_ERROR.getCode(), internalServerErrorDto.getCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), internalServerErrorDto.getHttpStatusCode());
+
+        // Generic BusinessException
+        for (ExceptionCode exceptionCode : ExceptionCode.values()) {
+            BusinessException businessException = new BusinessException(exceptionCode, errorMessage);
+            ExceptionDto businessExceptionDto = mapper.toExceptionDto(businessException);
+            assertEquals(exceptionCode.getCode(), businessExceptionDto.getCode());
+            assertEquals(exceptionCode.getHttpStatusCode(), businessExceptionDto.getHttpStatusCode());
+            assertEquals(exceptionCode.getReason(), businessExceptionDto.getReason());
+            assertEquals(errorMessage, businessExceptionDto.getMessage());
+        }
+    }
+
+    @Test
+    void shouldCorrectlyMapExceptionWithNullMessage() {
+        for (ExceptionCode exceptionCode : ExceptionCode.values()) {
+            BusinessException exception = new BusinessException(exceptionCode);
+            ExceptionDto dto = mapper.toExceptionDto(exception);
+
+            assertNotNull(dto);
+            assertEquals(exceptionCode.getCode(), dto.getCode());
+            assertEquals(exceptionCode.getHttpStatusCode(), dto.getHttpStatusCode());
+            assertEquals(exceptionCode.getReason(), dto.getReason());
+            assertNull(dto.getMessage());
+        }
+    }
+
+    @Test
+    void shouldVerifyAllExceptionCodesAreMapped() {
+        int expectedExceptionCodeCount = ExceptionCode.values().length;
+        int mappedExceptionCount = 0;
+
+        for (ExceptionCode exceptionCode : ExceptionCode.values()) {
+            BusinessException exception = new BusinessException(exceptionCode);
+            ExceptionDto dto = mapper.toExceptionDto(exception);
+
+            if (dto != null && dto.getCode().equals(exceptionCode.getCode())) {
+                mappedExceptionCount++;
+            }
+        }
+
+        assertEquals(expectedExceptionCodeCount, mappedExceptionCount,
+                "All exception codes should be properly mapped");
+    }
+
+    @Test
+    void shouldReturnNullWhenMappingNull() {
+        assertNull(mapper.toExceptionDto(null));
+    }
 }

@@ -146,4 +146,94 @@ class SecurityUtilTest {
             verify(jwt).getSubject();
         }
     }
+
+    @Test
+    void shouldHandleEmptyAuthenticationHeader() {
+        // Arrange
+        try (MockedStatic<SecurityContextHolder> securityContextHolder = mockStatic(SecurityContextHolder.class)) {
+            securityContextHolder.when(SecurityContextHolder::getContext)
+                    .thenReturn(securityContext);
+
+            when(securityContext.getAuthentication())
+                    .thenReturn(authentication);
+
+            when(authentication.getPrincipal())
+                    .thenReturn(null);
+
+            // Act & Assert
+            AuthenticationFailedException exception = assertThrows(AuthenticationFailedException.class,
+                    () -> securityUtil.getDigitalUser());
+
+            assertEquals("JWT not found in security context.", exception.getMessage());
+
+            // Verify
+            securityContextHolder.verify(SecurityContextHolder::getContext);
+            verify(securityContext).getAuthentication();
+            verify(authentication).getPrincipal();
+            verifyNoInteractions(jwt);
+        }
+    }
+
+    @Test
+    void shouldExtractSubjectFromJwtAndSetAsUserIdOnly() {
+        // Arrange
+        try (MockedStatic<SecurityContextHolder> securityContextHolder = mockStatic(SecurityContextHolder.class)) {
+            securityContextHolder.when(SecurityContextHolder::getContext)
+                    .thenReturn(securityContext);
+
+            when(securityContext.getAuthentication())
+                    .thenReturn(authentication);
+
+            when(authentication.getPrincipal())
+                    .thenReturn(jwt);
+
+            when(jwt.getSubject())
+                    .thenReturn(subject);
+
+            // Act
+            DigitalUser result = securityUtil.getDigitalUser();
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(subject, result.getId());
+            assertNull(result.getSubject()); // Should not set subject field
+
+            // Verify
+            securityContextHolder.verify(SecurityContextHolder::getContext);
+            verify(securityContext).getAuthentication();
+            verify(authentication).getPrincipal();
+            verify(jwt).getSubject();
+        }
+    }
+
+    @Test
+    void shouldThrowExceptionWhenJwtHasNullSubject() {
+        // Arrange
+        try (MockedStatic<SecurityContextHolder> securityContextHolder = mockStatic(SecurityContextHolder.class)) {
+            securityContextHolder.when(SecurityContextHolder::getContext)
+                    .thenReturn(securityContext);
+
+            when(securityContext.getAuthentication())
+                    .thenReturn(authentication);
+
+            when(authentication.getPrincipal())
+                    .thenReturn(jwt);
+
+            when(jwt.getSubject())
+                    .thenReturn(null);
+
+            // Act
+            DigitalUser result = securityUtil.getDigitalUser();
+
+            // Assert
+            assertNotNull(result);
+            assertNull(result.getId());
+
+            // Verify
+            securityContextHolder.verify(SecurityContextHolder::getContext);
+            verify(securityContext).getAuthentication();
+            verify(authentication).getPrincipal();
+            verify(jwt).getSubject();
+        }
+    }
 }

@@ -142,6 +142,148 @@ class GameControllerTest {
     }
 
     @Test
+    void shouldListGamesByCriteriaWithCreatedAtParameter() {
+        // Arrange
+        List<Game> games = Collections.singletonList(game);
+        ListByCriteriaUseCase.Output output = ListByCriteriaUseCase.Output.builder()
+                .games(games)
+                .build();
+
+        LocalDate createdAt = LocalDate.now();
+        when(listByCriteriaUseCase.execute(any(ListByCriteriaUseCase.Input.class)))
+                .thenReturn(output);
+
+        // Act
+        ResponseEntity<List<Game>> response = gameController.listByCriteria(
+                0, 10, null, null, null, null, null,
+                null, createdAt, LocalDate.now().minusDays(7), LocalDate.now(),
+                Collections.singletonList(OrderBy.TITLE),
+                Collections.singletonList(OrderDirection.ASC)
+        );
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(games, response.getBody());
+
+        verify(httpServletRequest).getHeader("Authorization");
+        verify(listByCriteriaUseCase).execute(argThat(input ->
+                input.getCreatedAt() == createdAt &&
+                        input.getFrom() == null &&
+                        input.getTo() == null
+        ));
+    }
+
+    @Test
+    void shouldListGamesByCriteriaWithAllFilterParameters() {
+        // Arrange
+        List<Game> games = Collections.singletonList(game);
+        ListByCriteriaUseCase.Output output = ListByCriteriaUseCase.Output.builder()
+                .games(games)
+                .build();
+
+        String title = "Last of Us";
+        String platform = "PlayStation";
+        String genre = "Action";
+        String developer = "Naughty Dog";
+        LocalDate releaseDate = LocalDate.of(2020, 6, 19);
+        LocalDate from = LocalDate.now().minusDays(7);
+        LocalDate to = LocalDate.now();
+
+        when(listByCriteriaUseCase.execute(any(ListByCriteriaUseCase.Input.class)))
+                .thenReturn(output);
+
+        // Act
+        ResponseEntity<List<Game>> response = gameController.listByCriteria(
+                0, 10, null, title, platform, genre, developer,
+                releaseDate, null, from, to,
+                Collections.singletonList(OrderBy.TITLE),
+                Collections.singletonList(OrderDirection.ASC)
+        );
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(games, response.getBody());
+
+        verify(httpServletRequest).getHeader("Authorization");
+        verify(listByCriteriaUseCase).execute(argThat(input ->
+                input.getTitle().equals(title) &&
+                        input.getPlatform().equals(platform) &&
+                        input.getGenre().equals(genre) &&
+                        input.getDeveloper().equals(developer) &&
+                        input.getReleaseDate().equals(releaseDate) &&
+                        input.getFrom().equals(from) &&
+                        input.getTo().equals(to)
+        ));
+    }
+
+    @Test
+    void shouldListGamesByCriteriaWithIdsParameter() {
+        // Arrange
+        List<Game> games = Collections.singletonList(game);
+        ListByCriteriaUseCase.Output output = ListByCriteriaUseCase.Output.builder()
+                .games(games)
+                .build();
+
+        String ids = UUID.randomUUID().toString() + "," + UUID.randomUUID().toString();
+        when(listByCriteriaUseCase.execute(any(ListByCriteriaUseCase.Input.class)))
+                .thenReturn(output);
+
+        // Act
+        ResponseEntity<List<Game>> response = gameController.listByCriteria(
+                0, 10, ids, null, null, null, null,
+                null, null, null, null,
+                Collections.singletonList(OrderBy.TITLE),
+                Collections.singletonList(OrderDirection.ASC)
+        );
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(games, response.getBody());
+
+        verify(httpServletRequest).getHeader("Authorization");
+        verify(listByCriteriaUseCase).execute(argThat(input ->
+                input.getIds().equals(ids)
+        ));
+    }
+
+    @Test
+    void shouldListGamesByCriteriaWithMultipleOrderingCriteria() {
+        // Arrange
+        List<Game> games = Collections.singletonList(game);
+        ListByCriteriaUseCase.Output output = ListByCriteriaUseCase.Output.builder()
+                .games(games)
+                .build();
+
+        List<OrderBy> orderByList = Arrays.asList(OrderBy.TITLE, OrderBy.GENRE);
+        List<OrderDirection> orderDirectionList = Arrays.asList(OrderDirection.ASC, OrderDirection.DESC);
+
+        when(listByCriteriaUseCase.execute(any(ListByCriteriaUseCase.Input.class)))
+                .thenReturn(output);
+
+        // Act
+        ResponseEntity<List<Game>> response = gameController.listByCriteria(
+                0, 10, null, null, null, null, null,
+                null, null, null, null,
+                orderByList,
+                orderDirectionList
+        );
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(games, response.getBody());
+
+        verify(httpServletRequest).getHeader("Authorization");
+        verify(listByCriteriaUseCase).execute(argThat(input ->
+                input.getOrderByList().equals(orderByList) &&
+                        input.getOrderDirectionList().equals(orderDirectionList)
+        ));
+    }
+
+    @Test
     void shouldThrowExceptionWhenOrderByAndOrderDirectionSizesDontMatch() {
         // Arrange
         List<OrderBy> orderByList = Arrays.asList(OrderBy.TITLE, OrderBy.PLATFORM);
@@ -321,6 +463,44 @@ class GameControllerTest {
         verify(deleteUseCase).execute(argThat(input ->
                 input.getJwt().equals(jwt) &&
                         input.getId().equals(gameId)
+        ));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeleteThrowsException() {
+        // Arrange
+        doThrow(new RuntimeException("Delete failed")).when(deleteUseCase).execute(any(DeleteUseCase.Input.class));
+
+        // Act & Assert
+        Exception exception = assertThrows(RuntimeException.class, () -> gameController.delete(gameId));
+        assertEquals("Delete failed", exception.getMessage());
+
+        verify(httpServletRequest).getHeader("Authorization");
+        verify(deleteUseCase).execute(any(DeleteUseCase.Input.class));
+    }
+
+    @Test
+    void shouldHandleWhenJwtIsNull() {
+        // Arrange
+        CreateUseCase.Output output = CreateUseCase.Output.builder()
+                .game(game)
+                .build();
+
+        when(httpServletRequest.getHeader("Authorization")).thenReturn(null);
+        when(createUseCase.execute(any(CreateUseCase.Input.class))).thenReturn(output);
+
+        // Act
+        ResponseEntity<Game> response = gameController.create(gameCreate);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(game, response.getBody());
+
+        verify(httpServletRequest).getHeader("Authorization");
+        verify(createUseCase).execute(argThat(input ->
+                input.getJwt() == null &&
+                        input.getGameCreate().equals(gameCreate)
         ));
     }
 }
